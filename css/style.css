@@ -89,7 +89,7 @@ h2{font-size:clamp(23px,3vw,34px)}
 /* карточки дел */
 .cases{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
 .case{text-align:left;background:var(--paper);border:1px solid var(--parch-line);
-      border-top:3px solid var(--brass);border-radius:26px;padding:22px;cursor:pointer;
+      border-top:3px solid var(--brass);border-radius:64px;padding:34px 34px 32px;cursor:pointer;
       box-shadow:0 3px 14px rgba(27,32,48,.07);
       transition:box-shadow .18s,transform .18s}
 .case:hover{box-shadow:0 14px 34px rgba(27,32,48,.16);transform:translateY(-3px)}
@@ -124,8 +124,8 @@ h2{font-size:clamp(23px,3vw,34px)}
   color:var(--brass-l);font-weight:700;margin:0 0 10px;text-align:right}
 .tl-right .tl-date{text-align:left}
 .tl-center .tl-date{text-align:center}
-.tl-card{background:var(--paper);color:var(--ink);border-radius:26px;border:1px solid var(--parch-line);
-  padding:24px 26px;box-shadow:0 18px 44px rgba(2,6,16,.5)}
+.tl-card{background:var(--paper);color:var(--ink);border-radius:56px;border:1px solid var(--parch-line);
+  padding:30px 36px;box-shadow:0 18px 44px rgba(2,6,16,.5)}
 .tl-card p{font-size:clamp(15px,1.3vw,17px);margin:0;color:var(--ink)}
 .tl-card .story-tag{font-size:11px;font-weight:700;letter-spacing:.18em;color:var(--brass-d);
   text-transform:uppercase;margin:0 0 10px}
@@ -176,7 +176,7 @@ h2{font-size:clamp(23px,3vw,34px)}
 .sl-stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;perspective:1100px;
   background:var(--navy)}
 .sl-slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  padding:0 8vw;border-radius:26px;backface-visibility:hidden;will-change:transform;transform-origin:50% 50%;
+  padding:0 8vw;border-radius:64px;backface-visibility:hidden;will-change:transform;transform-origin:50% 50%;
   box-shadow:0 0 80px rgba(0,0,0,.5)}
 .sl-tone-a{background:linear-gradient(160deg,#0d1526,#16213a)}
 .sl-tone-b{background:linear-gradient(160deg,#16213a,#243252)}
@@ -228,13 +228,13 @@ h2{font-size:clamp(23px,3vw,34px)}
 .hl-dot{position:absolute;left:-7px;top:-7px;width:14px;height:14px;border-radius:50%;background:var(--navy-2);
   transition:transform .3s}
 .hl-event.is-current .hl-dot{transform:scale(1.5);box-shadow:0 0 0 4px rgba(27,42,74,.15)}
-.hl-bubble{position:absolute;left:-24px;width:min(360px,78vw);background:var(--paper);border-radius:20px;
-  box-shadow:inset 0 0 5px rgba(158,158,158,.5),0 10px 30px rgba(27,32,48,.1);padding:11px 14px 12px;
+.hl-bubble{position:absolute;left:-24px;width:min(360px,78vw);background:var(--paper);border-radius:36px;
+  box-shadow:inset 0 0 5px rgba(158,158,158,.5),0 10px 30px rgba(27,32,48,.1);padding:16px 24px 18px;
   transition:transform .5s}
 .hl-above .hl-bubble{bottom:26px}
 .hl-below .hl-bubble{top:26px}
 .hl-event.is-future .hl-bubble{transform:translateY(8px)}
-.hl-bubble::after{content:'';position:absolute;left:14px;border:12px solid transparent}
+.hl-bubble::after{content:'';position:absolute;left:30px;border:12px solid transparent}
 .hl-above .hl-bubble::after{bottom:-24px;border-top-color:var(--paper)}
 .hl-below .hl-bubble::after{top:-24px;border-bottom-color:var(--paper)}
 .hl-time{display:flex;align-items:flex-start}
@@ -257,7 +257,7 @@ h2{font-size:clamp(23px,3vw,34px)}
 @media (max-height:680px){.hl-sub{display:none}.hl-text{font-size:12.5px}.hl-quote{display:none}}
 
 /* ------------------------------------------------- блоки фабулы ---------- */
-.story-card{background:var(--paper);color:var(--ink);text-shadow:none;border-radius:26px;
+.story-card{background:var(--paper);color:var(--ink);text-shadow:none;border-radius:64px;
             border:1px solid var(--parch-line);border-top:3px solid var(--brass);
             padding:30px 34px;box-shadow:0 24px 60px rgba(2,6,16,.55)}
 .blk .story-card{width:min(660px,90vw)}
@@ -270,8 +270,8 @@ h2{font-size:clamp(23px,3vw,34px)}
 .story-amount b{color:var(--bad)}
 
 /* карточки сторон в фабуле и на выборе позиции */
-.party{background:var(--paper);color:var(--ink);text-shadow:none;border-radius:26px;
-       border:1px solid var(--parch-line);padding:26px 30px;
+.party{background:var(--paper);color:var(--ink);text-shadow:none;border-radius:64px;
+       border:1px solid var(--parch-line);padding:34px 40px;
        box-shadow:0 24px 60px rgba(2,6,16,.55)}
 .blk .party{width:min(620px,90vw)}
 .party_p{border-left:4px solid var(--brass)}
@@ -286,7 +286,7 @@ h2{font-size:clamp(23px,3vw,34px)}
 /* выбор позиции */
 .sides{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
 .side{text-align:left;background:var(--paper);color:var(--ink);border:1px solid var(--parch-line);
-      border-radius:26px;padding:26px;cursor:pointer;
+      border-radius:64px;padding:36px 40px;cursor:pointer;
       transition:box-shadow .18s,transform .18s,outline-color .18s;outline:2px solid transparent}
 .side:hover{box-shadow:0 18px 44px rgba(2,6,16,.5);transform:translateY(-3px);outline-color:var(--brass)}
 .side-role{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--brass-d)}
@@ -304,16 +304,16 @@ h2{font-size:clamp(23px,3vw,34px)}
 .game-progress{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass-l);font-weight:700}
 .game{width:min(1180px,94vw);margin:0 auto;display:grid;gap:34px;
       grid-template-columns:minmax(300px,440px) 1fr;align-items:start}
-.doc-card{background:var(--paper);color:var(--ink);border-radius:26px;overflow:hidden;
+.doc-card{background:var(--paper);color:var(--ink);border-radius:56px;overflow:hidden;
           box-shadow:0 24px 60px rgba(0,0,0,.45)}
 .doc-card-head{display:flex;justify-content:space-between;align-items:center;
-               padding:16px 24px;border-bottom:2px solid var(--ink);
+               padding:22px 36px;border-bottom:2px solid var(--ink);
                font-family:var(--serif);font-size:21px;font-weight:700}
-.doc-card-body{height:62vh;min-height:380px;overflow-y:auto;padding:20px 24px;
+.doc-card-body{height:62vh;min-height:380px;overflow-y:auto;padding:24px 36px 34px;
                font-family:var(--serif);font-size:15px;line-height:1.62}
 .doc-card-body p{margin:0 0 12px;text-align:justify}
 .doc-card-body h4{font-family:var(--serif);font-size:16px;font-style:italic;margin:18px 0 8px}
-.doc-slot{border:1px dashed var(--parch-line);border-radius:16px;color:var(--mute);
+.doc-slot{border:1px dashed var(--parch-line);border-radius:24px;color:var(--mute);
           font-family:var(--sans);font-size:13px;font-style:italic;
           margin:8px 0 4px;padding:10px 12px}
 .doc-slot.is-filled{border-style:solid;padding:8px}
@@ -329,7 +329,7 @@ h2{font-size:clamp(23px,3vw,34px)}
 .opt-title{font-weight:700;color:var(--brass-l);margin:0 0 6px}
 .opt-caption{color:#c9cfdd;margin:0 0 18px;max-width:62ch;min-height:48px}
 .viz-row{display:flex;align-items:center;gap:12px}
-.viz-frame{flex:1;background:var(--paper);border-radius:20px;padding:10px;cursor:pointer;
+.viz-frame{flex:1;background:var(--paper);border-radius:40px;padding:22px;cursor:pointer;
            transition:box-shadow .18s,transform .18s;box-shadow:0 8px 26px rgba(0,0,0,.4)}
 .viz-frame:hover{box-shadow:0 0 0 3px var(--brass),0 8px 26px rgba(0,0,0,.4);transform:translateY(-2px)}
 .viz-frame svg{display:block;width:100%;height:auto}
@@ -347,8 +347,8 @@ h2{font-size:clamp(23px,3vw,34px)}
 .confirm-back:hover{color:var(--cream)}
 
 /* --------------------------------------------------------- документ ----- */
-.paper{background:var(--paper);border:1px solid var(--parch-line);border-radius:26px;
-       padding:46px 54px;font-family:var(--serif);font-size:16px;line-height:1.7;
+.paper{background:var(--paper);border:1px solid var(--parch-line);border-radius:64px;
+       padding:56px 64px;font-family:var(--serif);font-size:16px;line-height:1.7;
        box-shadow:0 16px 44px rgba(27,32,48,.14)}
 .paper h3{font-size:24px;margin:26px 0 12px}
 .paper h4{font-style:italic;font-size:17px;margin:20px 0 8px}
@@ -365,8 +365,8 @@ h2{font-size:clamp(23px,3vw,34px)}
 .paper-sign{text-align:right;margin-top:34px;font-weight:700}
 
 /* --------------------------------------------------------- результаты --- */
-.verdict-box{background:var(--paper);color:var(--ink);border-radius:26px;
-             border-top:4px solid var(--brass);padding:34px 36px;margin-bottom:24px;
+.verdict-box{background:var(--paper);color:var(--ink);border-radius:64px;
+             border-top:4px solid var(--brass);padding:44px 48px;margin-bottom:24px;
              box-shadow:0 24px 60px rgba(0,0,0,.45)}
 .verdict-court{text-align:center;font-family:var(--serif);font-size:13px;letter-spacing:.1em;
                text-transform:uppercase;color:var(--slate);margin:0 0 4px}
@@ -381,8 +381,8 @@ h2{font-size:clamp(23px,3vw,34px)}
 .stars i.on{background:var(--brass)}
 .stars-hint{font-size:13px;color:var(--mute);margin:12px 0 0}
 .verdict-text{color:var(--slate);margin:18px 0 0}
-.law{background:var(--parch);border-left:3px solid var(--brass);border-radius:0 20px 20px 0;
-     padding:16px 20px;margin-top:22px;font-size:14px}
+.law{background:var(--parch);border-left:3px solid var(--brass);border-radius:0 40px 40px 0;
+     padding:20px 28px;margin-top:22px;font-size:14px}
 .law b{display:block;margin-bottom:6px;font-family:var(--serif)}
 .law ul{margin:0;padding-left:18px;color:var(--slate)}
 
@@ -390,7 +390,7 @@ h2{font-size:clamp(23px,3vw,34px)}
 .modal{position:fixed;inset:0;background:rgba(8,12,24,.72);display:none;
        align-items:center;justify-content:center;padding:24px;z-index:50}
 .modal.is-active{display:flex}
-.modal-box{position:relative;background:var(--paper);border-radius:26px;padding:30px 32px;
+.modal-box{position:relative;background:var(--paper);border-radius:56px;padding:40px 44px;
            width:min(880px,94vw);max-height:88vh;overflow-y:auto;color:var(--ink)}
 .modal-close{position:absolute;top:14px;right:18px;border:0;background:none;
              font-size:28px;line-height:1;color:var(--mute);cursor:pointer}
@@ -400,7 +400,7 @@ h2{font-size:clamp(23px,3vw,34px)}
        padding:4px 12px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
 .badge_grey{background:var(--mute);color:#fff}
 .modal-grid{display:grid;gap:22px;grid-template-columns:1fr 1fr;align-items:start;margin-top:16px}
-.modal-grid svg{width:100%;height:auto;border:1px solid var(--parch-line);border-radius:20px}
+.modal-grid svg{width:100%;height:auto;border:1px solid var(--parch-line);border-radius:32px}
 
 /* ---------------------------------------------- планшеты и телефоны --- */
 @media (max-width:900px){
@@ -414,9 +414,17 @@ h2{font-size:clamp(23px,3vw,34px)}
   .doc-card-body{height:auto;max-height:46vh}
   .modal-grid{grid-template-columns:1fr}
   .modal-box{padding:24px 20px}
-  .paper{padding:26px 20px}
-  .story-card{padding:22px 20px}
-  .party{padding:22px 20px}
+  .paper{padding:34px 26px;border-radius:40px}
+  .story-card{padding:26px 24px;border-radius:40px}
+  .party{padding:26px 24px;border-radius:40px}
+  .case,.side{border-radius:44px;padding:28px 28px 26px}
+  .doc-card{border-radius:40px}
+  .doc-card-head{padding:18px 26px}
+  .doc-card-body{padding:20px 26px 26px}
+  .verdict-box{border-radius:40px;padding:30px 26px}
+  .modal-box{border-radius:40px;padding:28px 26px}
+  .tl-card{border-radius:40px;padding:24px 26px}
+  .viz-frame{border-radius:28px;padding:14px}
 }
 @media (max-width:767px){
   .hl-head{top:16px}
