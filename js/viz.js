@@ -70,17 +70,28 @@ window.Viz = (function () {
       s += txt(cx, y + 34, m, { anchor: 'middle', size: 11, fill: C.slate });
     });
 
-    /* события над шкалой */
-    (d.events || []).forEach(function (e, i) {
+    /* события над шкалой: подпись — на первую строку, где она не пересекается с
+       уже поставленными (ширина оценивается по длине текста); якорь «end» только
+       если текст не влезает справа. Раньше строки чередовались по индексу, и
+       1-е с 3-м событием накладывались. */
+    var rows = [[], [], []], placed = [];
+    (d.events || []).forEach(function (e) {
       var cx = x0 + step * e.at;
-      var ty = 96 + (i % 2) * 34;
-      s += '<line x1="' + cx + '" y1="' + (ty + 6) + '" x2="' + cx + '" y2="' + (y - 20) +
+      var w = Math.max(e.label.length, (e.note || '').length) * 6.1 + 4;
+      var anchor = cx + 8 + w > x1 ? 'end' : 'start';
+      var xs = anchor === 'end' ? cx - 8 - w : cx + 8, xe = xs + w;
+      var r = 0;
+      while (r < rows.length - 1 && rows[r].some(function (b) { return xs < b[1] + 10 && xe > b[0] - 10; })) r++;
+      rows[r].push([xs, xe]);
+      placed.push({ e: e, cx: cx, anchor: anchor, ty: 92 + r * 32 });
+    });
+    placed.forEach(function (p) {
+      s += '<line x1="' + p.cx + '" y1="' + (p.ty + 6) + '" x2="' + p.cx + '" y2="' + (y - 20) +
            '" stroke="' + C.mute + '" stroke-dasharray="2 3"/>';
-      s += '<circle cx="' + cx + '" cy="' + (y - 20) + '" r="4" fill="' + C.accent + '"/>';
-      var anchor = e.at > n * 0.7 ? 'end' : 'start';
-      s += txt(cx + (anchor === 'end' ? -8 : 8), ty, e.label, { size: 11, weight: 600, anchor: anchor });
-      if (e.note) s += txt(cx + (anchor === 'end' ? -8 : 8), ty + 15, e.note,
-                           { size: 10.5, fill: C.slate, anchor: anchor });
+      s += '<circle cx="' + p.cx + '" cy="' + (y - 20) + '" r="4" fill="' + C.accent + '"/>';
+      var dx = p.anchor === 'end' ? -8 : 8;
+      s += txt(p.cx + dx, p.ty, p.e.label, { size: 11, weight: 600, anchor: p.anchor });
+      if (p.e.note) s += txt(p.cx + dx, p.ty + 15, p.e.note, { size: 10.5, fill: C.slate, anchor: p.anchor });
     });
 
     if (d.callout) {
