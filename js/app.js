@@ -242,11 +242,14 @@
 
   function buildStory() {
     var c = cur(), sec = $('#ch-story');
-    sec.className = c.story === 'slides' ? 'tl-sec tl-sec_slides' : 'flow flow_dark tl-sec' + (c.story === 'focus' ? ' tl-sec_focus' : '');
+    sec.className = c.story === 'slides' ? 'tl-sec tl-sec_slides' :
+                    c.story === 'hline' ? 'tl-sec tl-sec_hline' :
+                    'flow flow_dark tl-sec' + (c.story === 'focus' ? ' tl-sec_focus' : '');
     sec.style.height = '';
-    slides = []; focusItems = [];
+    slides = []; focusItems = []; hl = null;
     if (c.story === 'focus') return buildStoryFocus();
     if (c.story === 'slides') return buildStorySlides();
+    if (c.story === 'hline') return buildStoryHline();
     return buildStoryCards();
   }
 
@@ -292,6 +295,86 @@
     updateSlides();
     Scrolly.refresh();
   }
+
+  /* Стиль «hline» (по пену yourinium/adMoyv «HR Timeline»): горизонтальная линия,
+     события с «пузырями» над и под ней по очереди — крупная цифра дня, день недели,
+     месяц и год, заголовок акцентом; будущие события серые и полупрозрачные; бейдж
+     «СЕЙЧАС» на линии. Лента едет влево по мере вертикального скролла, бейдж —
+     курсор чтения; событие проявляется, когда курсор до него доходит. */
+  var hl = null;
+  var WEEKDAYS = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
+  var MONTH_NAMES = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'];
+  function hlTime(text, i) {
+    var m = text.match(/\b(\d{2})\.(\d{2})\.(\d{4})\b/);
+    if (m) {
+      var d = new Date(+m[3], +m[2] - 1, +m[1]);
+      return { digit: m[1], day: WEEKDAYS[d.getDay()], month: MONTH_NAMES[+m[2] - 1] + ' ' + m[3] };
+    }
+    m = text.match(new RegExp(MONTHS_RX + '\\s+(\\d{4})', 'i'));
+    if (m) return { digit: '·', day: m[0].split(/\s+/)[0], month: m[m.length - 1] };
+    m = text.match(/[Пп]ункт(?:ом|а|у)?\s+(\d+(?:\.\d+)?)/);
+    if (m) return { digit: m[1], day: 'пункт', month: 'договора' };
+    return { digit: String(i), day: 'этап', month: 'без даты' };
+  }
+  function buildStoryHline() {
+    var c = cur(), host = $('#story-blocks'), sec = $('#ch-story'), ev = [];
+    function event(i, t, title, body, cls) {
+      return '<div class="hl-event ' + (i % 2 ? 'hl-below' : 'hl-above') + (cls ? ' ' + cls : '') + ' is-future" data-i="' + i + '">' +
+        '<span class="hl-dot"></span>' +
+        '<div class="hl-bubble">' +
+          '<div class="hl-time"><span class="hl-digit">' + esc(t.digit) + '</span>' +
+            '<span class="hl-day">' + esc(t.day) + '<span class="hl-month">' + esc(t.month) + '</span></span></div>' +
+          '<div class="hl-title">' + esc(title) + '</div>' + body +
+        '</div></div>';
+    }
+    c.facts.forEach(function (f, i) {
+      ev.push(event(i, hlTime(f, i + 1), 'Обстоятельства · ' + (i + 1) + ' из ' + c.facts.length, '<p class="hl-text">' + esc(f) + '</p>'));
+    });
+    ['plaintiff', 'defendant'].forEach(function (k, j) {
+      var p = c.parties[k], isP = k === 'plaintiff', i = c.facts.length + j;
+      ev.push(event(i, { digit: isP ? 'И' : 'О', day: isP ? 'истец' : 'ответчик', month: p.role },
+        p.name, '<p class="hl-text">' + esc(p.claim) + '</p><p class="hl-quote">«' + esc(p.quote) + '»</p>', isP ? 'hl-party_p' : 'hl-party_d'));
+    });
+    var n = ev.length;
+    host.innerHTML = '<div class="hl-stage">' +
+      '<div class="hl-head"><p class="eyebrow eyebrow_dark">Шаг 2 · фабула дела</p>' +
+        '<h2>' + esc(c.short) + '</h2>' +
+        '<p class="hl-sub">' + esc(c.court) + ' · дело № ' + esc(c.number) + ' · цена иска ' + money(c.amount) + '</p></div>' +
+      '<div class="hl-track"><div class="hl-line"></div><div class="hl-line hl-line_done"></div>' + ev.join('') +
+        '<div class="hl-now">СЕЙЧАС</div></div>' +
+      '<p class="hl-hint">Листайте — лента событий движется, будущие события проявляются по мере чтения</p>' +
+      '</div>';
+    sec.style.height = (n * 100 + 60) + 'vh';
+    hl = { n: n, track: host.querySelector('.hl-track'), events: Array.prototype.slice.call(host.querySelectorAll('.hl-event')),
+           now: host.querySelector('.hl-now'), done: host.querySelector('.hl-line_done'), line: host.querySelector('.hl-line') };
+    layoutHline(); updateHline();
+    if (tlObserver) tlObserver.disconnect();
+    Scrolly.refresh();
+  }
+  function hlSpacing() { return Math.max(300, Math.min(420, window.innerWidth * 0.34)); }
+  function layoutHline() {
+    if (!hl) return;
+    var sp = hlSpacing(), x0 = 40;
+    hl.events.forEach(function (el, i) { el.style.left = (x0 + i * sp) + 'px'; });
+    hl.line.style.width = (x0 + (hl.n - 1) * sp + 160) + 'px';
+  }
+  function updateHline() {
+    if (!hl) return;
+    var top = $('#ch-story').getBoundingClientRect().top + window.pageYOffset;
+    var s = Math.max(-0.4, Math.min(hl.n - 1 + 0.35, (window.pageYOffset - top) / window.innerHeight));
+    var sp = hlSpacing(), x0 = 40, cursor = x0 + s * sp;               /* положение «СЕЙЧАС» на ленте */
+    var tx = window.innerWidth * 0.5 - cursor;                        /* лента едет так, чтобы курсор был по центру */
+    hl.track.style.transform = 'translateX(' + Math.round(tx) + 'px)';
+    hl.now.style.left = cursor + 'px';
+    hl.done.style.width = Math.max(0, cursor) + 'px';
+    hl.events.forEach(function (el, i) {
+      var reached = s >= i - 0.22;
+      el.classList.toggle('is-future', !reached);
+      el.classList.toggle('is-current', reached && s < i + 0.78);
+    });
+  }
+  window.addEventListener('scroll', function () { if (hl && !$('#case-flow').hidden) updateHline(); }, { passive: true });
+  window.addEventListener('resize', function () { if (hl) { layoutHline(); updateHline(); } });
 
   function slideProgress() {
     var top = $('#ch-story').getBoundingClientRect().top + window.pageYOffset;
