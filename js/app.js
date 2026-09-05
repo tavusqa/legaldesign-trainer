@@ -136,9 +136,15 @@
       scale:   { at: [0, 2.4], to: [1, 1.34] },
       y:       { at: [0, 2.4], to: [0, 120] }
     });
+    /* На узких экранах (портрет) текст актов стоит наверху, а весы и
+       документ уходят в нижнюю половину сцены и мельче — иначе накладка. */
+    var narrow = function (v) { return v.w <= 900; };
+    var lowY = function (k) { return function (v) { return narrow(v) ? v.h * k : 0; }; };
     Scrolly.add(ch, '#sc-scales', {
       opacity: { at: [0.68, 1.05, 1.75, 2.1], to: [0, 1, 1, 0] },
-      scale:   { at: [0.68, 2.1], to: [0.86, 1.02] }
+      scale:   { at: [0.68, 2.1], to: [function (v) { return narrow(v) ? 0.72 : 0.86; },
+                                       function (v) { return narrow(v) ? 0.82 : 1.02; }] },
+      y:       { at: [0, 99], to: [lowY(0.2), lowY(0.2)] }
     });
     Scrolly.add(ch, '#sc-beam', {
       rotate:  { at: [0.95, 1.8], to: [-7, 0] }  /* весы приходят в равновесие */
@@ -148,8 +154,10 @@
       opacity: { at: [1.7, 2.1, 3.2, 3.55], to: [0, 1, 1, 0] },
       x:       { at: [0, 99], to: [function (v) { return v.w > 900 ? v.w * 0.2 : 0; },
                                    function (v) { return v.w > 900 ? v.w * 0.2 : 0; }] },
-      y:       { at: [1.7, 3.4], to: [70, -10] },
-      scale:   { at: [1.7, 3.4], to: [0.92, 1] }
+      y:       { at: [1.7, 3.4], to: [function (v) { return 70 + (narrow(v) ? v.h * 0.13 : 0); },
+                                       function (v) { return -10 + (narrow(v) ? v.h * 0.13 : 0); }] },
+      scale:   { at: [1.7, 3.4], to: [function (v) { return v.w <= 600 ? 0.6 : narrow(v) ? 0.72 : 0.92; },
+                                       function (v) { return v.w <= 600 ? 0.66 : narrow(v) ? 0.78 : 1; }] }
     });
     Scrolly.add(ch, '#sc-doc-text',  { opacity: { at: [2.35, 2.75], to: [1, 0.18] } });
     Scrolly.add(ch, '#sc-doc-chart', { opacity: { at: [2.35, 2.8], to: [0, 1] } });
@@ -308,7 +316,7 @@
     $('#doc-body').innerHTML =
       a.docText.map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('') +
       '<h4>' + esc(a.vizTitle) + '</h4>' +
-      '<div class="doc-slot" id="slot">место для визуализации — выберите её справа</div>';
+      '<div class="doc-slot" id="slot">место для визуализации — выберите её из вариантов</div>';
     renderChooser(0);
   }
 

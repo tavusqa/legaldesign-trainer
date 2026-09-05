@@ -43,7 +43,7 @@ h2{font-size:clamp(23px,3vw,34px)}
    ничего не ломается при перестройке DOM, обратная прокрутка бесплатна. */
 .chapter{position:relative}
 .chapter_intro{height:550vh}
-.stage{position:sticky;top:0;height:100vh;overflow:hidden;background:var(--navy)}
+.stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:var(--navy)}
 .scene{position:absolute;inset:0;width:100%;height:100%}
 .scene g{transform-origin:600px 400px;transform-box:view-box}
 #sc-beam{transform-origin:593px 196px} /* коромысло качается вокруг кольца */
@@ -245,10 +245,38 @@ h2{font-size:clamp(23px,3vw,34px)}
 .modal-grid{display:grid;gap:22px;grid-template-columns:1fr 1fr;align-items:start;margin-top:16px}
 .modal-grid svg{width:100%;height:auto;border:1px solid var(--parch-line);border-radius:8px}
 
+/* ---------------------------------------------- планшеты и телефоны --- */
 @media (max-width:900px){
-  .game{grid-template-columns:1fr}
+  /* в портрете сцена узкая: текст актов — наверх, документ и весы — в низ (см. app.js) */
+  .blk_left{justify-content:flex-start;padding-top:11vh;padding-left:6vw}
+  .blk_left>*{width:min(560px,88vw)}
+  .blk_left::before{background:linear-gradient(rgba(6,10,22,.92),rgba(6,10,22,.55) 34%,transparent 52%)}
+  .flow{padding:52px 0 64px}
+  .game-top{flex-wrap:wrap;gap:6px 16px}
+  .game{grid-template-columns:1fr;gap:26px}
   .doc-card-body{height:auto;max-height:46vh}
   .modal-grid{grid-template-columns:1fr}
+  .modal-box{padding:24px 20px}
   .paper{padding:26px 20px}
   .story-card{padding:22px 20px}
+  .party{padding:22px 20px}
+}
+@media (max-width:600px){
+  .flow_game{padding:18px 0 48px}
+  .doc-card-head{font-size:18px;padding:12px 16px}
+  .doc-card-body{padding:16px;font-size:14.5px}
+  .doc-card-body p{text-align:left}
+  .prompt{font-size:16px}
+  /* карусель: схема во всю ширину, стрелки под ней */
+  .viz-row{flex-wrap:wrap;justify-content:center;gap:10px}
+  .viz-frame{flex:1 1 100%;order:-1;padding:6px}
+  .arrow{width:64px;height:40px;border:1px solid var(--stone-l);border-radius:8px;font-size:24px;color:var(--cream)}
+  .paper{font-size:15px}
+  .paper p{text-align:left;text-indent:0}
+  .paper-head{flex-direction:column;gap:8px}
+  .paper-head>div{text-align:left!important}
+  .paper-req{grid-template-columns:110px 1fr}
+  .verdict-box{padding:24px 18px}
+  .stars-name{width:96px;font-size:17px}
+  .blk_dark:not(.blk_left)::before{background:radial-gradient(closest-side,rgba(6,10,22,.86),rgba(6,10,22,.5) 62%,transparent 84%)}
 }
