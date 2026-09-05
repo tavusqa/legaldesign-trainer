@@ -212,79 +212,67 @@
     }).join('');
   }
 
-  /* ============================================ глава-фабула по делу ===== */
-  /* Блоки: титул дела → факты (по одному на экран) → истец → ответчик.
-     Высота главы кратна числу блоков; выбор позиции лежит ПОСЛЕ главы. */
-  function buildStory() {
-    var c = cur(), ch = $('#ch-story'), host = $('#story-blocks');
-    var blocks = [];
+  /* ======================================== фабула: вертикальный таймлайн == */
+  /* Титул дела → обстоятельства (слева/справа по очереди, с датой-маркером на
+     линии) → истец слева, ответчик справа. Карточки появляются, когда входят в
+     кадр, и уходят при обратном скролле (IntersectionObserver). */
+  var MONTHS_RX = '(январ|феврал|март|апрел|ма[йя]|июн|июл|август|сентябр|октябр|ноябр|декабр|зим|весн|лет|осен)[а-яё]*';
+  function dateLabel(text, i) {
+    var m = text.match(/\b(\d{2})\.(\d{2})\.(\d{4})\b/);
+    if (m) return m[1] + '.' + m[2] + '.' + m[3];
+    m = text.match(new RegExp(MONTHS_RX + '\\s+(\\d{4})', 'i'));
+    if (m) return m[0].charAt(0).toUpperCase() + m[0].slice(1).toLowerCase();
+    m = text.match(/\b(19|20)\d{2}\b/);
+    if (m) return m[0] + ' год';
+    return '';   /* даты нет — метка над карточкой не нужна, подпись есть в самой карточке */
+  }
 
-    blocks.push(
-      '<div class="story-card">' +
-        '<p class="story-tag">Шаг 2 · фабула дела</p>' +
+  var tlObserver = null;
+  function observeTimeline() {
+    if (tlObserver) tlObserver.disconnect();
+    if (!('IntersectionObserver' in window)) {
+      document.querySelectorAll('.tl-item').forEach(function (el) { el.classList.add('is-visible'); });
+      return;
+    }
+    tlObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { e.target.classList.toggle('is-visible', e.isIntersecting); });
+    }, { threshold: 0.2, rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('.tl-item').forEach(function (el) { tlObserver.observe(el); });
+  }
+
+  function buildStory() {
+    var c = cur(), host = $('#story-blocks'), items = [];
+
+    items.push('<div class="tl-item tl-center"><span class="tl-dot"></span>' +
+      '<p class="tl-date">' + esc(c.court) + ' · дело № ' + esc(c.number) + '</p>' +
+      '<div class="tl-card"><p class="story-tag">Предмет спора</p>' +
         '<h2>' + esc(c.short) + '</h2>' +
-        '<p class="story-court">' + esc(c.court) + ' · дело № ' + esc(c.number) + '</p>' +
         '<p class="story-amount">Цена иска — <b>' + money(c.amount) + '</b></p>' +
-      '</div>');
+      '</div></div>');
 
     c.facts.forEach(function (f, i) {
-      blocks.push(
-        '<div class="story-card">' +
-          '<p class="story-tag">Обстоятельства · ' + (i + 1) + ' из ' + c.facts.length + '</p>' +
-          '<p>' + esc(f) + '</p>' +
-        '</div>');
+      var side = i % 2 === 0 ? 'tl-left' : 'tl-right';
+      var d = dateLabel(f, i + 1);
+      items.push('<div class="tl-item ' + side + '"><span class="tl-dot"></span>' +
+        (d ? '<p class="tl-date">' + esc(d) + '</p>' : '<p class="tl-date tl-date_empty">&nbsp;</p>') +
+        '<div class="tl-card"><p class="story-tag">Обстоятельства · ' + (i + 1) + ' из ' + c.facts.length + '</p>' +
+        '<p>' + esc(f) + '</p></div></div>');
     });
 
     ['plaintiff', 'defendant'].forEach(function (k) {
-      var p = c.parties[k];
-      blocks.push(
-        '<div class="party ' + (k === 'plaintiff' ? 'party_p' : 'party_d') + '">' +
-          '<span class="party-role">' + (k === 'plaintiff' ? 'Позиция истца' : 'Позиция ответчика') + '</span>' +
+      var p = c.parties[k], isP = k === 'plaintiff';
+      items.push('<div class="tl-item ' + (isP ? 'tl-left' : 'tl-right') + '"><span class="tl-dot"></span>' +
+        '<p class="tl-date">' + (isP ? 'Позиция истца' : 'Позиция ответчика') + '</p>' +
+        '<div class="tl-card ' + (isP ? 'party_p' : 'party_d') + '">' +
           '<div class="party-name">' + esc(p.name) + '</div>' +
           '<p class="party-sub">' + esc(p.role) + '</p>' +
           '<p class="party-claim">' + esc(p.claim) + '</p>' +
           '<p class="party-quote">«' + esc(p.quote) + '»</p>' +
-        '</div>');
+        '</div></div>');
     });
 
-    var n = blocks.length;
-    ch.style.height = (n * 100 + 50) + 'vh';
-    host.innerHTML = blocks.map(function (b, i) {
-      return '<div class="blk" id="st-' + i + '">' + b + '</div>';
-    }).join('');
-
-    /* эмблема-фон: кольцо с весами, едва заметная, с лёгким параллаксом */
-    $('#sc-emblem').innerHTML =
-      '<g opacity=".13" stroke="#c9a227" fill="none">' +
-      '<circle cx="600" cy="350" r="235" stroke-width="3"/>' +
-      '<circle cx="600" cy="350" r="215" stroke-width="1"/>' +
-      '<line x1="600" y1="215" x2="600" y2="465" stroke-width="7"/>' +
-      '<line x1="472" y1="252" x2="728" y2="252" stroke-width="7"/>' +
-      '<path d="M452 252 l30 62 h-60 z M748 252 l-30 62 h60 z" fill="#c9a227" stroke="none"/>' +
-      '<line x1="545" y1="465" x2="655" y2="465" stroke-width="7"/></g>';
-
-    Scrolly.reset(ch);
-    Scrolly.add(ch, '#sc-emblem', {
-      scale: { at: [0, n], to: [1, 1.16] },
-      rotate: { at: [0, n], to: [-2, 2] }
-    });
-    blocks.forEach(function (_, i) {
-      var last = i === n - 1;
-      var props = {
-        opacity: last
-          ? { at: [i - 0.2, i + 0.12], to: [0, 1] }        /* последний уезжает вместе со сценой */
-          : i === 0
-            ? { at: [0, 0.78, 1.14], to: [1, 1, 0] }
-            : { at: [i - 0.2, i + 0.12, i + 0.78, i + 1.14], to: [0, 1, 1, 0] },
-        y: { at: [i - 0.2, i + 1.14], to: [54, -54] }
-      };
-      if (i === 0) props.y = { at: [0, 1.14], to: [0, -54] };
-      if (last) props.y = { at: [i - 0.2, i + 0.5], to: [54, 0] };
-      /* истец въезжает слева, ответчик справа — как в спецпроекте */
-      if (i === n - 2) props.x = { at: [i - 0.2, i + 0.2], to: [function (v) { return -v.w * 0.06; }, 0] };
-      if (last) props.x = { at: [i - 0.2, i + 0.2], to: [function (v) { return v.w * 0.06; }, 0] };
-      Scrolly.add(ch, '#st-' + i, props);
-    });
+    host.innerHTML = items.join('') + '<p class="tl-end">Фабула изучена — ниже выбор позиции</p>';
+    observeTimeline();
     Scrolly.refresh();
   }
 

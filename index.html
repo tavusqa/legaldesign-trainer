@@ -78,13 +78,13 @@
 <!-- ================================== ГЛАВА 2: фабула выбранного дела ==== -->
 <!-- Содержимое строится из cases.js при выборе дела. -->
 <div id="case-flow" hidden>
-  <section class="chapter chapter_story" id="ch-story">
-    <div class="stage">
-      <svg class="scene" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-        <rect width="1200" height="700" fill="url(#g-sky)"/>
-        <g id="sc-emblem"></g>
-      </svg>
-      <div id="story-blocks"></div>
+  <!-- Фабула — вертикальный таймлайн: центральная линия, карточки слева/справа,
+       появляются при попадании в кадр (IntersectionObserver), при обратном
+       скролле уходят. Содержимое строится из cases.js при выборе дела. -->
+  <section class="flow flow_dark tl-sec" id="ch-story">
+    <div class="wrap">
+      <p class="eyebrow">Шаг 2 · фабула дела</p>
+      <div class="timeline" id="story-blocks"></div>
     </div>
   </section>
 

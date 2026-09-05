@@ -100,6 +100,41 @@ h2{font-size:clamp(23px,3vw,34px)}
 .case-a{font-size:14px;font-weight:700;color:var(--ink)}
 .cases-note{color:var(--mute);font-size:13px;margin:22px 0 0;text-align:center}
 
+/* ----------------------------------------------- фабула: таймлайн ------- */
+.tl-sec{display:block;padding:72px 0 40px}
+.tl-sec .eyebrow{text-align:center;margin-bottom:34px}
+.timeline{position:relative;padding:10px 0 30px}
+.timeline::before{content:'';position:absolute;top:0;bottom:0;left:50%;width:2px;margin-left:-1px;
+  background:linear-gradient(var(--brass) 0,var(--brass) calc(100% - 120px),transparent)}
+.tl-item{position:relative;width:50%;padding:0 48px 0 0;margin:0 0 42px;
+  opacity:0;transform:translateY(34px) translateX(-24px);
+  transition:opacity .6s ease,transform .6s ease}
+.tl-item.tl-right{margin-left:50%;padding:0 0 0 48px;transform:translateY(34px) translateX(24px)}
+.tl-item.tl-center{width:min(680px,100%);margin-left:auto;margin-right:auto;padding:0;
+  transform:translateY(34px)}
+.tl-item.is-visible{opacity:1;transform:none}
+.tl-dot{position:absolute;top:26px;right:-9px;width:18px;height:18px;border-radius:50%;
+  background:var(--navy);border:3px solid var(--brass);box-shadow:0 0 0 6px rgba(201,162,39,.15)}
+.tl-right .tl-dot{right:auto;left:-9px}
+.tl-center .tl-dot{display:none}
+.tl-date{font-family:var(--sans);font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--brass-l);font-weight:700;margin:0 0 10px;text-align:right}
+.tl-right .tl-date{text-align:left}
+.tl-center .tl-date{text-align:center}
+.tl-card{background:var(--paper);color:var(--ink);border-radius:10px;border:1px solid var(--parch-line);
+  padding:24px 26px;box-shadow:0 18px 44px rgba(2,6,16,.5)}
+.tl-card p{font-size:clamp(15px,1.3vw,17px);margin:0;color:var(--ink)}
+.tl-card .story-tag{font-size:11px;font-weight:700;letter-spacing:.18em;color:var(--brass-d);
+  text-transform:uppercase;margin:0 0 10px}
+.tl-card h2{margin-bottom:6px;font-size:clamp(21px,2.4vw,28px)}
+.tl-card .story-court{color:var(--slate);font-size:14px;margin-top:10px}
+.tl-card .story-amount{font-family:var(--serif);font-size:clamp(18px,1.8vw,22px);margin-top:12px}
+.tl-card .story-amount b{color:var(--bad)}
+.tl-card.party_p{border-left:4px solid var(--brass)}
+.tl-card.party_d{border-left:4px solid var(--stone-l)}
+.tl-end{text-align:center;color:var(--mute);font-size:13px;letter-spacing:.1em;text-transform:uppercase;
+  margin:10px 0 0}
+
 /* ------------------------------------------------- блоки фабулы ---------- */
 .story-card{background:var(--paper);color:var(--ink);text-shadow:none;border-radius:10px;
             border:1px solid var(--parch-line);border-top:3px solid var(--brass);
@@ -261,6 +296,16 @@ h2{font-size:clamp(23px,3vw,34px)}
   .paper{padding:26px 20px}
   .story-card{padding:22px 20px}
   .party{padding:22px 20px}
+}
+@media (max-width:700px){
+  .timeline::before{left:14px;margin-left:0}
+  .tl-item,.tl-item.tl-right,.tl-item.tl-center{width:100%;margin-left:0;padding:0 0 0 44px;
+    transform:translateY(30px)}
+  .tl-dot,.tl-right .tl-dot{right:auto;left:5px;top:22px}
+  .tl-center .tl-dot{display:block}
+  .tl-date,.tl-center .tl-date{text-align:left}
+  .tl-card{padding:20px 18px}
+  .tl-sec{padding:52px 0 32px}
 }
 @media (max-width:600px){
   .flow_game{padding:18px 0 48px}
