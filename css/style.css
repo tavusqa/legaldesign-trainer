@@ -483,19 +483,32 @@ h2{font-size:clamp(23px,3vw,34px)}
 }
 
 /* =====================================================================
-   ТЕМА «ЗЕЛЁНОЕ СТЕКЛО» (05.09, вечер) — по экрану входа hr-platform
-   (.login-screen / .login-box): глубокий зелёный радиальный градиент, блоки —
-   тёмное стекло rgba(3,43,32,.55) с кремовой кромкой, blur 10px, тень
-   0 30px 70px; текст кремовый #F8E7C9. Радиусы 56–64px оставлены.
-   Блок переопределений идёт последним и побеждает по порядку. */
+   ТЕМА «ЗЕЛЁНЫЙ ФОН + СВЕТЛОЕ СТЕКЛО» (05.09, вечер) — фон как экран входа
+   hr-platform (.login-screen), блоки — как карточки главной (.glass-page > .card):
+   белое полупрозрачное стекло, blur 18px + saturate, белая кромка, мягкая тень и
+   блики; текст внутри блоков тёмный, текст на зелёном фоне — кремовый #F8E7C9.
+   Радиусы 56–64px сохранены. Блок идёт последним и побеждает по порядку. */
 :root{
   --g-deep:#032B20; --g-mid:#064E3B; --g-light:#086A50;
   --page:radial-gradient(1100px 560px at 28% 18%, var(--g-light) 0%, var(--g-mid) 58%, var(--g-deep) 100%);
-  --cr:#F8E7C9; --cr-85:rgba(248,231,201,.85); --cr-6:rgba(248,231,201,.6); --cr-4:rgba(248,231,201,.4);
-  --cr-18:rgba(248,231,201,.18); --cr-1:rgba(248,231,201,.1); --cr-06:rgba(248,231,201,.06);
-  --glass-bg:rgba(3,43,32,.55); --glass-brd:1px solid var(--cr-18);
-  --glass-shadow:0 30px 70px rgba(0,0,0,.55); --glass-blur:blur(10px);
-  --sheet:#fbf7ee;   /* светлый «лист» для схем и печатного документа внутри стекла */
+  --cr:#F8E7C9; --cr-6:rgba(248,231,201,.6); --cr-4:rgba(248,231,201,.4); --cr-18:rgba(248,231,201,.18); --cr-1:rgba(248,231,201,.1);
+  /* стекло — токены hr-platform один в один */
+  --glass-bg:
+    radial-gradient(120% 90% at 50% -20%, rgba(255,255,255,.78) 0%, rgba(255,255,255,.22) 44%, rgba(255,255,255,0) 72%),
+    linear-gradient(158deg, rgba(255,255,255,.72), rgba(255,255,255,.44));
+  --glass-brd:rgba(255,255,255,.85);
+  --glass-blur:blur(18px) saturate(168%);
+  --glass-shadow:0 12px 30px -14px rgba(15,23,42,.28), 0 2px 6px rgba(15,23,42,.05), 0 30px 70px rgba(0,0,0,.35);
+  --glass-spec:
+    inset 0 0 0 1px rgba(255,255,255,.45),
+    inset 1.8px 3px 0 -2px rgba(255,255,255,.92),
+    inset -2px -2px 0 -2px rgba(255,255,255,.8),
+    inset -3px -8px 1px -6px rgba(255,255,255,.6),
+    inset -.3px -1px 4px 0 rgba(15,23,42,.10),
+    inset -1.5px 2.5px 0 -2px rgba(15,23,42,.13);
+  --glass-hover:0 16px 34px -14px rgba(15,23,42,.34);
+  --in-ink:#0f172a; --in-slate:#334155; --in-mute:#64748b; --in-line:rgba(15,23,42,.10);
+  --sheet:rgba(255,255,255,.9);
 }
 html{background:var(--g-deep)}
 body{background:var(--g-deep);color:var(--cr)}
@@ -507,98 +520,98 @@ body{background:var(--g-deep);color:var(--cr)}
 .blk_left::before{background:linear-gradient(90deg,rgba(2,20,15,.85),rgba(2,20,15,.5) 52%,transparent 80%)}
 .scroll-hint{color:var(--cr-6)}
 
-/* --- секции --- */
+/* --- секции: зелёный фон, кремовый текст вне блоков --- */
 .flow,.flow_dark,.tl-sec,.tl-sec_slides,.tl-sec_hline,.hl-stage,.sl-stage{background:var(--page);color:var(--cr)}
 .flow_dark .flow-sub,.flow-sub{color:var(--cr-6)}
 .eyebrow,.eyebrow_dark{color:var(--brass-l)}
 h1,h2,h3{color:var(--cr)}
 .link{color:var(--brass-l)} .link:hover{color:var(--cr)}
 .cases-note{color:var(--cr-4)}
-/* кнопки — как .login-role/.login-sso-btn: кремовое стекло; главная — сплошной крем */
 .btn{background:var(--cr);color:var(--g-deep);border:1px solid var(--cr);box-shadow:0 10px 30px rgba(0,0,0,.35)}
 .btn:hover{background:#fff3d6;border-color:#fff3d6}
 .btn_ghost,.flow_dark .btn_ghost,.flow:not(.flow_dark) .btn_ghost{background:var(--cr-1);color:var(--cr);border:1px solid rgba(248,231,201,.35);box-shadow:none}
 .btn_ghost:hover{background:var(--cr-18);border-color:var(--cr-6);color:var(--cr)}
 
-/* --- стеклянные блоки --- */
-.case,.side,.tl-card,.story-card,.party,.doc-card,.paper,.verdict-box,.modal-box,.hl-bubble,.sl-slide{
-  background:var(--glass-bg);border:var(--glass-brd);box-shadow:var(--glass-shadow);
-  -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);color:var(--cr)}
-.case{border-top:var(--glass-brd)}
-.case:hover,.side:hover{border-color:var(--cr);background:rgba(248,231,201,.08);box-shadow:0 0 0 3px rgba(248,231,201,.12),var(--glass-shadow);transform:translateY(-2px)}
-.case-n,.side-role,.party-role,.story-tag,.tl-card .story-tag{color:var(--brass-l)}
-.case-t,.side-name,.party-name{color:var(--cr)}
-.case-d,.side-hint,.side-sub,.party-sub,.party-claim,.story-court{color:var(--cr-6)}
-.case-a,.side-hint b{color:var(--cr)}
-.party-quote{color:var(--cr-6);border-left-color:var(--cr-18)}
-.story-amount,.tl-card .story-amount{color:var(--cr)} .story-amount b,.tl-card .story-amount b{color:var(--brass-l)}
+/* --- стеклянные блоки: светлое стекло, тёмный текст внутри --- */
+.case,.side,.tl-card,.story-card,.party,.doc-card,.paper,.verdict-box,.modal-box,.hl-bubble,.sl-slide,.viz-frame{
+  background:var(--glass-bg);border:1px solid var(--glass-brd);
+  box-shadow:var(--glass-shadow),var(--glass-spec);
+  -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);color:var(--in-ink)}
+.case,.side,.tl-card,.story-card,.party,.doc-card,.paper,.verdict-box,.modal-box,.hl-bubble,.sl-slide{ }
+.case{border-top:1px solid var(--glass-brd)}
+.case:hover,.side:hover{box-shadow:var(--glass-hover),var(--glass-spec);transform:translateY(-3px);border-color:#fff}
+.viz-frame:hover{box-shadow:0 0 0 3px var(--brass),var(--glass-hover),var(--glass-spec)}
+/* содержимое блоков */
+.case h2,.side h2,.tl-card h2,.story-card h2,.paper h3,.paper h4,.verdict-box h3,.modal-box h3,.doc-card-head{color:var(--in-ink)}
+.case-n,.side-role,.party-role,.story-tag,.tl-card .story-tag,.tl-date{color:var(--brass-d)}
+.case-t,.side-name,.party-name,.case-a,.side-hint b{color:var(--in-ink)}
+.case-d,.side-hint,.side-sub,.party-sub,.party-claim,.story-court{color:var(--in-slate)}
+.party-quote{color:var(--in-slate);border-left-color:var(--in-line)}
+.story-amount,.tl-card .story-amount{color:var(--in-ink)} .story-amount b,.tl-card .story-amount b{color:var(--bad)}
+.tl-card p,.story-card p{color:var(--in-ink)}
 .party_p,.tl-card.party_p{border-left:4px solid var(--brass)}
-.party_d{border-right:4px solid var(--cr-4)} .tl-card.party_d{border-left:4px solid var(--cr-4)}
-.tl-card p,.story-card p{color:var(--cr-85)}
+.party_d{border-right:4px solid var(--in-mute)} .tl-card.party_d{border-left:4px solid var(--in-mute)}
 .verdict-box{border-top:4px solid var(--brass)}
+.doc-card-head{border-bottom:2px solid var(--in-ink);background:rgba(255,255,255,.35)}
+.doc-card-body{color:var(--in-ink)} .doc-card-body h4{color:var(--in-ink)}
+.info-btn{border-color:var(--brass-d);color:var(--brass-d)}
+.doc-slot{border-color:var(--in-line);background:rgba(255,255,255,.45);color:var(--in-mute)}
+.doc-slot.is-filled,.paper svg,.modal-grid svg{background:var(--sheet);border-radius:24px}
+.paper svg,.modal-grid svg{padding:14px;box-sizing:border-box;border:none}
+.doc-slot.is-filled{border:none;padding:12px}
+.viz-frame{background:var(--sheet)}   /* схема — плотнее, чтобы тонкий SVG-текст читался */
+.paper{color:var(--in-ink)} .paper-sign{color:var(--in-ink)}
+.paper-head{color:var(--in-slate);border-bottom-color:var(--in-line)} .paper-req dt{color:var(--in-mute)} .paper-req dd{color:var(--in-ink)}
+.verdict-court{color:var(--in-slate)} .verdict-h{color:var(--in-ink)} .verdict-v{color:var(--brass-d)}
+.stars-name{color:var(--in-ink)} .stars-row{border-bottom-color:var(--in-line)} .stars-row:hover .stars-name{color:var(--brass-d)}
+.stars i{background:rgba(15,23,42,.12)} .stars i.on{background:var(--brass)}
+.stars-hint{color:var(--in-mute)} .verdict-text{color:var(--in-slate)}
+.law{background:rgba(255,255,255,.45);border-left:3px solid var(--brass);color:var(--in-slate)} .law b{color:var(--in-ink)} .law ul{color:var(--in-slate)}
+.modal{background:rgba(2,20,15,.7)} .modal-box{color:var(--in-ink)} .modal-close{color:var(--in-mute)} .modal-close:hover{color:var(--in-ink)}
+.modal-body h3{color:var(--in-ink)} .modal-body p{color:var(--in-slate)}
+.badge{background:var(--brass);color:var(--g-deep)} .badge_grey{background:rgba(15,23,42,.12);color:var(--in-ink)}
 
-/* --- сборка документа --- */
+/* --- сборка документа: текст на зелёном — крем --- */
 .game-role{color:var(--cr-6)} .game-progress{color:var(--brass-l)}
 .prompt{color:var(--cr)} .opt-title{color:var(--brass-l)} .opt-caption{color:var(--cr-6)}
 .slider-dots i{background:var(--cr-18)} .slider-dots i.is-active{background:var(--brass)}
 .arrow{color:var(--cr-6)} .arrow:hover{color:var(--cr)} .pick-note{color:var(--cr-4)}
 .confirm p{color:var(--cr)} .confirm-back{color:var(--cr-6)} .confirm-back:hover{color:var(--cr)}
-.doc-card-head{border-bottom:1px solid var(--cr-18);background:var(--cr-06);color:var(--cr)}
-.doc-card-body{color:var(--cr-85)} .doc-card-body h4{color:var(--cr)}
-.info-btn{border-color:var(--brass-l);color:var(--brass-l)}
-.doc-slot{border-color:var(--cr-18);background:var(--cr-06);color:var(--cr-4)}
-/* схемы — светлый лист внутри стекла, иначе тёмный текст SVG нечитаем */
-.viz-frame{background:var(--sheet);border:1px solid var(--cr-18);box-shadow:0 20px 50px rgba(0,0,0,.45)}
-.viz-frame:hover{box-shadow:0 0 0 3px var(--brass),0 20px 50px rgba(0,0,0,.45)}
-.doc-slot.is-filled,.paper svg,.modal-grid svg{background:var(--sheet);border-radius:24px}
-.paper svg,.modal-grid svg{padding:14px;box-sizing:border-box;border:none}
-.doc-slot.is-filled{border:none;padding:12px}
-/* печатный документ и решение — на тёмном стекле кремом */
-.paper{color:var(--cr-85)} .paper h3,.paper h4,.paper-sign{color:var(--cr)}
-.paper-head{color:var(--cr-6);border-bottom-color:var(--cr-18)} .paper-req dt{color:var(--cr-4)} .paper-req dd{color:var(--cr)}
-.verdict-court{color:var(--cr-6)} .verdict-h{color:var(--cr)} .verdict-v{color:var(--brass-l)}
-.stars-name{color:var(--cr)} .stars-row{border-bottom-color:var(--cr-18)} .stars-row:hover .stars-name{color:var(--brass-l)}
-.stars i{background:var(--cr-18)} .stars i.on{background:var(--brass)}
-.stars-hint{color:var(--cr-4)} .verdict-text{color:var(--cr-85)}
-.law{background:var(--cr-06);border-left:3px solid var(--brass);color:var(--cr-85)} .law b{color:var(--cr)} .law ul{color:var(--cr-6)}
-.modal{background:rgba(2,20,15,.7)} .modal-box{color:var(--cr)} .modal-close{color:var(--cr-6)} .modal-close:hover{color:var(--cr)}
-.modal-body h3{color:var(--cr)} .modal-body p{color:var(--cr-85)}
-.badge{background:var(--brass);color:var(--g-deep)} .badge_grey{background:var(--cr-18);color:var(--cr)}
 
 /* --- фабула: карточки --- */
 .timeline::before{background:linear-gradient(var(--brass) 0,var(--brass) calc(100% - 120px),transparent)}
 .tl-dot{background:var(--g-deep);border-color:var(--brass);box-shadow:0 0 0 6px rgba(201,162,39,.16)}
-.tl-date{color:var(--brass-l)} .tl-end{color:var(--cr-4)} .tl-card h2{color:var(--cr)}
-/* --- фабула: focus --- */
+.tl-date{color:var(--brass-l)} .tl-end{color:var(--cr-4)}
+/* --- фабула: focus (без блоков — текст на фоне кремом) --- */
 .fx-header__title{color:var(--cr)} .fx-header__sub{color:var(--cr-4)}
 .fx-timeline::before{background:var(--cr-18)}
 .fx-title{color:var(--brass-l)} .fx-item.is-active .fx-title{color:var(--cr)}
-.fx-desc{color:var(--cr-6)} .fx-item.is-active .fx-desc{color:var(--cr-85)}
+.fx-desc{color:var(--cr-6)} .fx-item.is-active .fx-desc{color:rgba(248,231,201,.88)}
 .fx-name{color:var(--cr)} .fx-name span{color:var(--cr-6)} .fx-quote{color:var(--cr-6);border-left-color:rgba(201,162,39,.5)}
 .fx-item::before{color:var(--cr-6);border-left-color:var(--brass)} .fx-item:nth-child(even)::before{border-right-color:var(--brass)}
-/* --- фабула: slides --- */
+/* --- фабула: slides — светлые стеклянные панели --- */
 .sl-tone-a,.sl-tone-b,.sl-tone-c,.sl-tone-d{background:var(--glass-bg)}
 .sl-slide{inset:3vh 3vw}
-.sl-inner,.sl-title{color:var(--cr)} .sl-label{color:var(--brass-l)} .sl-text{color:var(--cr-85)}
-.sl-amount{color:var(--cr)} .sl-amount b{color:var(--brass-l)} .sl-role{color:var(--cr-6)}
-.sl-quote{color:var(--cr-6);border-top-color:rgba(201,162,39,.4)} .sl-hint{color:var(--cr-4)}
-.sl-eyebrow{color:var(--brass-l)}
-.sl-arrow{background:var(--cr-1);color:var(--cr);border-color:rgba(248,231,201,.35)} .sl-arrow:hover{background:var(--cr-18)}
+.sl-inner,.sl-title,.sl-amount{color:var(--in-ink)} .sl-label{color:var(--brass-d)} .sl-text{color:var(--in-slate)}
+.sl-amount b{color:var(--brass-d)} .sl-role{color:var(--in-mute)}
+.sl-quote{color:var(--in-slate);border-top-color:rgba(201,162,39,.45)} .sl-hint{color:var(--in-mute)}
+.sl-eyebrow{color:var(--brass-d)}
+.sl-arrow{background:rgba(3,43,32,.55);color:var(--cr);border-color:rgba(248,231,201,.45);box-shadow:0 8px 24px rgba(0,0,0,.35)} .sl-arrow:hover{background:rgba(3,43,32,.8)}
 .sl-dot{border-color:var(--cr-4);background:transparent} .sl-dot.is-active{background:var(--brass);border-color:var(--brass)}
-.sl-slide_d .sl-inner{border-right-color:var(--cr-4)}
+.sl-slide_p .sl-inner{border-left-color:var(--brass)} .sl-slide_d .sl-inner{border-right-color:var(--in-mute)}
 /* --- фабула: hline --- */
 .hl-head h2{color:var(--cr)} .hl-sub{color:var(--cr-4)}
 .hl-bubble::after{display:none}
 .hl-line{background:var(--cr-18)} .hl-line_done{background:var(--cr)}
 .hl-dot{background:var(--cr)} .hl-event.is-current .hl-dot{box-shadow:0 0 0 4px rgba(248,231,201,.18)}
-.hl-digit,.hl-day{color:var(--cr)} .hl-month{color:var(--cr-6)} .hl-title{color:var(--brass-l)}
-.hl-party_p .hl-title{color:var(--brass-l)} .hl-party_d .hl-title{color:var(--cr-6)}
-.hl-text{color:var(--cr-85)} .hl-quote{color:var(--cr-6);border-left-color:var(--cr-18)}
+.hl-digit,.hl-day{color:var(--in-ink)} .hl-month{color:var(--in-mute)} .hl-title{color:var(--bad)}
+.hl-party_p .hl-title{color:var(--brass-d)} .hl-party_d .hl-title{color:var(--in-slate)}
+.hl-text{color:var(--in-ink)} .hl-quote{color:var(--in-slate);border-left-color:var(--in-line)}
 .hl-now{background:var(--cr);color:var(--g-deep);border-color:var(--g-deep);box-shadow:0 0 0 2px var(--cr)}
 .hl-hint{color:var(--cr-4)}
 
-/* мобильные и слабые GPU: без размытия, заливка плотнее */
+/* мобильные и слабые GPU: без размытия, заливка плотнее (как в hr-platform) */
 @media (max-width:720px){
-  .case,.side,.tl-card,.story-card,.party,.doc-card,.paper,.verdict-box,.modal-box,.hl-bubble,.sl-slide{
-    -webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(3,43,32,.88)}
+  .case,.side,.tl-card,.story-card,.party,.doc-card,.paper,.verdict-box,.modal-box,.hl-bubble,.sl-slide,.viz-frame{
+    -webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(255,255,255,.9)}
 }
