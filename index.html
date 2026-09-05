@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Аренда CLM — тренажёр: выиграйте спор понятным документом</title>
+<meta name="description" content="Юридический тренажёр по legal design: изучите фабулу спора из аренды, займите позицию и соберите процессуальный документ, выбирая визуализации доводов. Решение суда зависит от подачи.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ================================================= ГЛАВА 1: интро ====== -->
+<!-- Секция высотой в несколько экранов; сцена sticky, слои и текстовые блоки
+     интерполируются движком scrolly.js по позиции прокрутки (в обе стороны). -->
+<section class="chapter chapter_intro" id="ch-intro">
+  <div class="stage">
+    <svg class="scene" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <linearGradient id="g-sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#0a101f"/><stop offset="1" stop-color="#141f38"/>
+        </linearGradient>
+        <linearGradient id="g-brass" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#e3c05a"/><stop offset=".55" stop-color="#c9a227"/>
+          <stop offset="1" stop-color="#8a6d15"/>
+        </linearGradient>
+        <linearGradient id="g-stone" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#2b3a5e"/><stop offset="1" stop-color="#1a2440"/>
+        </linearGradient>
+      </defs>
+      <rect width="1200" height="700" fill="url(#g-sky)"/>
+      <g id="sc-court"></g>
+      <g id="sc-scales"></g>
+      <g id="sc-doc"></g>
+    </svg>
+    <div class="veil veil_light" id="veil-light"></div>
+
+    <div class="blk blk_dark" id="in-0">
+      <p class="eyebrow">Аренда CLM · юридический тренажёр</p>
+      <h1>Судья читает ваш документ восемь минут</h1>
+      <p>В производстве арбитражного судьи — десятки дел. На договор аренды, расчёт задолженности и три довода уходят считанные минуты. Сплошным текстом за это время не убедить.</p>
+    </div>
+
+    <div class="blk blk_dark blk_left" id="in-1">
+      <p>Спор из аренды — это всегда цифры, сроки и метры: периоды начисления, показания приборов, доли площади, даты уведомлений.</p>
+      <p class="blk-note">Изложенные текстом, они остаются в голове читающего — если он их удержит.</p>
+    </div>
+
+    <div class="blk blk_dark blk_left" id="in-2">
+      <p>Тот же расчёт, показанный схемой, судья проверяет за секунды — и сразу видит, где именно расходятся позиции сторон.</p>
+      <p class="blk-note">Это и есть legal design: не украшение, а способ быть понятым.</p>
+    </div>
+
+    <div class="blk blk_light" id="in-3">
+      <h2>Как устроен тренажёр</h2>
+      <ol class="steps">
+        <li><b>Выберите дело</b> — четыре спора из аренды нежилых помещений.</li>
+        <li><b>Изучите фабулу</b> — обстоятельства и позиции сторон, шаг за шагом.</li>
+        <li><b>Займите позицию</b> — выбор появится, когда фабула прочитана.</li>
+        <li><b>Соберите документ</b> — к каждому доводу подберите визуализацию. Суд оценит подачу.</li>
+      </ol>
+      <p class="blk-note">Листайте дальше — к делам ↓</p>
+    </div>
+  </div>
+  <div class="scroll-hint" id="hint">Листайте вниз<span></span></div>
+</section>
+
+<!-- ============================================= ЭКРАН: выбор дела ======= -->
+<section class="flow" id="sec-cases">
+  <div class="wrap">
+    <p class="eyebrow eyebrow_dark">Шаг 1 · дело</p>
+    <h2 class="flow-title">Четыре спора из аренды нежилых помещений</h2>
+    <p class="flow-sub">Дела вымышлены, правовые позиции — нет: они опираются на разъяснения ВС РФ и ВАС РФ и указаны в разборе после решения суда.</p>
+    <div class="cases" id="cases-list"></div>
+  </div>
+</section>
+
+<!-- ================================== ГЛАВА 2: фабула выбранного дела ==== -->
+<!-- Содержимое строится из cases.js при выборе дела. -->
+<div id="case-flow" hidden>
+  <section class="chapter chapter_story" id="ch-story">
+    <div class="stage">
+      <svg class="scene" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect width="1200" height="700" fill="url(#g-sky)"/>
+        <g id="sc-emblem"></g>
+      </svg>
+      <div id="story-blocks"></div>
+    </div>
+  </section>
+
+  <!-- Выбор позиции: обычная секция ПОСЛЕ главы с фабулой — до неё физически
+       нельзя добраться, не прокрутив все блоки условий. -->
+  <section class="flow flow_dark" id="sec-side">
+    <div class="wrap">
+      <p class="eyebrow">Шаг 3 · позиция</p>
+      <h2 class="flow-title">За кого выступаете?</h2>
+      <p class="flow-sub" id="side-sub">Фабула изучена. Теперь решите, чью позицию будете защищать — от этого зависят доводы и документ.</p>
+      <div class="sides" id="side-cards"></div>
+      <p class="side-remind"><button class="link js-recap" type="button">‹ Перечитать фабулу</button></p>
+    </div>
+  </section>
+
+  <div id="post-side" hidden>
+    <!-- ======================================= ЭКРАН: сборка документа === -->
+    <section class="flow flow_dark flow_game" id="sec-game">
+      <div class="game-top">
+        <span class="game-role" id="game-role"></span>
+        <span class="game-progress" id="game-progress"></span>
+      </div>
+      <div class="game">
+        <div class="game-doc">
+          <div class="doc-card">
+            <div class="doc-card-head">
+              <span id="doc-head-title"></span>
+              <button class="info-btn js-info" type="button" title="О документе">i</button>
+            </div>
+            <div class="doc-card-body" id="doc-body"></div>
+          </div>
+        </div>
+        <div class="game-choice" id="game-choice"></div>
+      </div>
+    </section>
+
+    <!-- ======================================= ЭКРАН: готовый документ === -->
+    <section class="flow" id="sec-final" hidden>
+      <div class="wrap wrap_narrow">
+        <p class="eyebrow eyebrow_dark">Шаг 4 · документ готов</p>
+        <h2 class="flow-title" id="final-kind"></h2>
+        <p class="flow-sub">Перечитайте документ целиком — так его увидит судья.</p>
+        <div class="paper" id="final-paper"></div>
+        <div class="center"><button class="btn js-submit" type="button">Передать дело на рассмотрение</button></div>
+      </div>
+    </section>
+
+    <!-- ======================================= ЭКРАН: решение суда ======= -->
+    <section class="flow flow_dark" id="sec-results" hidden>
+      <div class="wrap wrap_narrow">
+        <p class="eyebrow">Решение суда</p>
+        <div class="verdict" id="verdict"></div>
+        <div class="center actions">
+          <button class="btn js-other-side" type="button">Сыграть за другую сторону</button>
+          <button class="btn btn_ghost js-other-case" type="button">Выбрать другое дело</button>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- ============================================ модальное окно =========== -->
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <button class="modal-close js-modal-close" type="button" aria-label="Закрыть">&times;</button>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script src="js/scrolly.js"></script>
+<script src="js/viz.js"></script>
+<script src="js/cases.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
