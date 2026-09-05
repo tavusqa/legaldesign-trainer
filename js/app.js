@@ -243,12 +243,13 @@
   function buildStory() {
     var c = cur(), host = $('#story-blocks'), items = [];
 
-    items.push('<div class="tl-item tl-center"><span class="tl-dot"></span>' +
+    /* титул дела — над таймлайном, чтобы линия не проходила сквозь карточку */
+    var head = '<div class="tl-head tl-item tl-center">' +
       '<p class="tl-date">' + esc(c.court) + ' · дело № ' + esc(c.number) + '</p>' +
       '<div class="tl-card"><p class="story-tag">Предмет спора</p>' +
         '<h2>' + esc(c.short) + '</h2>' +
         '<p class="story-amount">Цена иска — <b>' + money(c.amount) + '</b></p>' +
-      '</div></div>');
+      '</div></div>';
 
     c.facts.forEach(function (f, i) {
       var side = i % 2 === 0 ? 'tl-left' : 'tl-right';
@@ -271,7 +272,8 @@
         '</div></div>');
     });
 
-    host.innerHTML = items.join('') + '<p class="tl-end">Фабула изучена — ниже выбор позиции</p>';
+    host.innerHTML = head + '<div class="timeline">' + items.join('') + '</div>' +
+      '<p class="tl-end">Фабула изучена — ниже выбор позиции</p>';
     observeTimeline();
     Scrolly.refresh();
   }

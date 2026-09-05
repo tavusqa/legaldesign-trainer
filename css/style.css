@@ -112,11 +112,14 @@ h2{font-size:clamp(23px,3vw,34px)}
 .tl-item.tl-right{margin-left:50%;padding:0 0 0 48px;transform:translateY(34px) translateX(24px)}
 .tl-item.tl-center{width:min(680px,100%);margin-left:auto;margin-right:auto;padding:0;
   transform:translateY(34px)}
+.tl-head{margin-bottom:46px}
+.timeline{padding-top:26px}
 .tl-item.is-visible{opacity:1;transform:none}
 .tl-dot{position:absolute;top:26px;right:-9px;width:18px;height:18px;border-radius:50%;
   background:var(--navy);border:3px solid var(--brass);box-shadow:0 0 0 6px rgba(201,162,39,.15)}
 .tl-right .tl-dot{right:auto;left:-9px}
 .tl-center .tl-dot{display:none}
+.tl-head .tl-dot{display:none}
 .tl-date{font-family:var(--sans);font-size:12px;letter-spacing:.16em;text-transform:uppercase;
   color:var(--brass-l);font-weight:700;margin:0 0 10px;text-align:right}
 .tl-right .tl-date{text-align:left}
@@ -302,7 +305,8 @@ h2{font-size:clamp(23px,3vw,34px)}
   .tl-item,.tl-item.tl-right,.tl-item.tl-center{width:100%;margin-left:0;padding:0 0 0 44px;
     transform:translateY(30px)}
   .tl-dot,.tl-right .tl-dot{right:auto;left:5px;top:22px}
-  .tl-center .tl-dot{display:block}
+  .tl-center .tl-dot,.tl-head .tl-dot{display:none}
+  .tl-head.tl-item.tl-center{padding-left:0;width:100%}
   .tl-date,.tl-center .tl-date{text-align:left}
   .tl-card{padding:20px 18px}
   .tl-sec{padding:52px 0 32px}
