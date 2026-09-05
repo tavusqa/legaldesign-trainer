@@ -44,28 +44,28 @@
     for (i = 0; i < 14; i++) {
       var bh = 60 + ((i * 97) % 130);
       s += '<rect x="' + (i * 90 - 30) + '" y="' + (560 - bh) + '" width="64" height="' + bh +
-           '" fill="#111a2e"/>';
+           '" fill="#052e24"/>';
     }
     /* лестница */
     for (i = 0; i < 4; i++) {
       s += '<rect x="' + (300 - i * 24) + '" y="' + (560 + i * 18) + '" width="' + (600 + i * 48) +
-           '" height="18" fill="' + (i % 2 ? '#1a2440' : '#1f2b4a') + '"/>';
+           '" height="18" fill="' + (i % 2 ? '#063a2c' : '#07463a') + '"/>';
     }
     /* стилобат и колоннада */
     s += '<rect x="320" y="300" width="560" height="260" fill="url(#g-stone)"/>';
     for (i = 0; i < 6; i++) {
       var cx = 352 + i * 100;
-      s += '<rect x="' + cx + '" y="316" width="30" height="224" rx="3" fill="#31405f"/>' +
-           '<rect x="' + (cx - 5) + '" y="308" width="40" height="12" rx="2" fill="#3a4a6d"/>' +
-           '<rect x="' + (cx - 5) + '" y="536" width="40" height="12" rx="2" fill="#3a4a6d"/>' +
-           '<rect x="' + (cx + 4) + '" y="316" width="6" height="224" fill="#243252"/>';
+      s += '<rect x="' + cx + '" y="316" width="30" height="224" rx="3" fill="#0f5a48"/>' +
+           '<rect x="' + (cx - 5) + '" y="308" width="40" height="12" rx="2" fill="#136a55"/>' +
+           '<rect x="' + (cx - 5) + '" y="536" width="40" height="12" rx="2" fill="#136a55"/>' +
+           '<rect x="' + (cx + 4) + '" y="316" width="6" height="224" fill="#0b4a3a"/>';
     }
     /* антаблемент и фронтон */
-    s += '<rect x="308" y="272" width="584" height="30" fill="#3a4a6d"/>' +
-         '<path d="M300 272 L600 176 L900 272 Z" fill="#2b3a5e" stroke="#43547a" stroke-width="2"/>';
+    s += '<rect x="308" y="272" width="584" height="30" fill="#136a55"/>' +
+         '<path d="M300 272 L600 176 L900 272 Z" fill="#0e5544" stroke="#1a7a62" stroke-width="2"/>';
     /* дверной проём */
-    s += '<rect x="560" y="442" width="80" height="98" rx="3" fill="#0b1220"/>' +
-         '<text x="600" y="666" text-anchor="middle" fill="#5b6b93" font-size="15" ' +
+    s += '<rect x="560" y="442" width="80" height="98" rx="3" fill="#021b15"/>' +
+         '<text x="600" y="666" text-anchor="middle" fill="#8fb8a6" font-size="15" ' +
          'font-family="Georgia,serif" letter-spacing="6">АРБИТРАЖНЫЙ СУД</text>';
     $('#sc-court').innerHTML = s;
 
