@@ -241,6 +241,62 @@
   }
 
   function buildStory() {
+    var c = cur();
+    $('#ch-story').classList.toggle('tl-sec_focus', c.story === 'focus');
+    if (c.story === 'focus') return buildStoryFocus();
+    return buildStoryCards();
+  }
+
+  /* Стиль «focus» (по пену knyttneve/bgvmma): тонкая линия по центру, блоки
+     слева/справа, у каждого крупная дата-заголовок; в фокусе только блок у
+     середины экрана — остальные приглушены и размыты; сбоку появляется подпись. */
+  var focusItems = [];
+  function buildStoryFocus() {
+    var c = cur(), host = $('#story-blocks'), items = [];
+    function item(label, title, body, extra) {
+      return '<div class="fx-item" data-text="' + esc(label) + '">' +
+        '<div class="fx-content">' +
+          '<h2 class="fx-title">' + esc(title) + '</h2>' + body + (extra || '') +
+        '</div></div>';
+    }
+    c.facts.forEach(function (f, i) {
+      var d = dateLabel(f, i + 1) || 'Этап ' + (i + 1);
+      items.push(item('Обстоятельства · ' + (i + 1) + ' из ' + c.facts.length, d, '<p class="fx-desc">' + esc(f) + '</p>'));
+    });
+    ['plaintiff', 'defendant'].forEach(function (k) {
+      var p = c.parties[k], isP = k === 'plaintiff';
+      items.push(item(isP ? 'Позиция истца' : 'Позиция ответчика', isP ? 'Истец' : 'Ответчик',
+        '<p class="fx-name">' + esc(p.name) + ' <span>' + esc(p.role) + '</span></p>' +
+        '<p class="fx-desc">' + esc(p.claim) + '</p>' +
+        '<p class="fx-quote">«' + esc(p.quote) + '»</p>'));
+    });
+    host.innerHTML =
+      '<div class="fx-header"><h2 class="fx-header__title">' + esc(c.short) + '</h2>' +
+      '<p class="fx-header__sub">' + esc(c.court) + ' · дело № ' + esc(c.number) + ' · цена иска ' + money(c.amount) + '</p></div>' +
+      '<div class="fx-timeline">' + items.join('') + '</div>' +
+      '<p class="tl-end">Фабула изучена — ниже выбор позиции</p>';
+    focusItems = Array.prototype.slice.call(host.querySelectorAll('.fx-item'));
+    if (tlObserver) tlObserver.disconnect();
+    updateFocus();
+    Scrolly.refresh();
+  }
+
+  /* Активен блок, чья середина ближе всего к центру экрана (в пределах экрана);
+     до первого блока активен первый, после последнего — последний. Чистая функция
+     от scrollY → обратный скролл отматывает. */
+  function updateFocus() {
+    if (!focusItems.length) return;
+    var mid = window.innerHeight * 0.5, best = null, bestD = Infinity;
+    focusItems.forEach(function (el) {
+      var r = el.getBoundingClientRect(), d = Math.abs((r.top + r.bottom) / 2 - mid);
+      if (d < bestD) { bestD = d; best = el; }
+    });
+    focusItems.forEach(function (el) { el.classList.toggle('is-active', el === best); });
+  }
+  window.addEventListener('scroll', function () { if (focusItems.length && !$('#case-flow').hidden) updateFocus(); }, { passive: true });
+  window.addEventListener('resize', updateFocus);
+
+  function buildStoryCards() {
     var c = cur(), host = $('#story-blocks'), items = [];
 
     /* титул дела — над таймлайном, чтобы линия не проходила сквозь карточку */
@@ -274,6 +330,7 @@
 
     host.innerHTML = head + '<div class="timeline">' + items.join('') + '</div>' +
       '<p class="tl-end">Фабула изучена — ниже выбор позиции</p>';
+    focusItems = [];
     observeTimeline();
     Scrolly.refresh();
   }

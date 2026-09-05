@@ -138,6 +138,37 @@ h2{font-size:clamp(23px,3vw,34px)}
 .tl-end{text-align:center;color:var(--mute);font-size:13px;letter-spacing:.1em;text-transform:uppercase;
   margin:10px 0 0}
 
+/* ---------------------------------- фабула: стиль «focus» (пен bgvmma) --- */
+.tl-sec_focus{padding-bottom:20px}
+.fx-header{text-align:center;margin:0 auto 70px;max-width:760px}
+.fx-header__title{font-size:clamp(26px,3.4vw,42px);font-weight:400;color:var(--cream);margin:0}
+.fx-header__sub{font-family:var(--sans);font-size:13px;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(245,237,216,.5);margin:12px 0 0}
+.fx-timeline{display:flex;flex-direction:column;position:relative;max-width:760px;margin:0 auto}
+.fx-timeline::before{content:'';position:absolute;left:50%;top:0;height:100%;width:2px;margin-left:-1px;
+  background:rgba(227,192,90,.16)}
+.fx-item{position:relative;width:calc(50% - 40px);padding:40px 0;display:flex;box-sizing:border-box;
+  opacity:.28;filter:blur(2px);transform:translateY(-60px);transition:.5s}
+.fx-item:nth-child(even){align-self:flex-end}
+.fx-item.is-active{opacity:1;filter:none;transform:none}
+/* подпись сбоку, через линию, у активного блока */
+.fx-item::before{content:attr(data-text);position:absolute;top:70%;right:calc(-100% - 56px);width:100%;
+  margin-top:-5px;padding-left:15px;font-family:var(--sans);font-size:12px;letter-spacing:.2em;
+  text-transform:uppercase;color:rgba(245,237,216,.55);border-left:2px solid rgba(227,192,90,.55);
+  opacity:0;transition:.3s all .2s}
+.fx-item:nth-child(even)::before{right:auto;left:calc(-100% - 56px);text-align:right;padding-left:0;
+  padding-right:15px;border-left:none;border-right:2px solid rgba(227,192,90,.55)}
+.fx-item.is-active::before{top:50%;opacity:1}
+.fx-content{padding:0 10px;box-sizing:border-box}
+.fx-title{font-family:var(--serif);font-weight:400;font-size:clamp(40px,4.6vw,62px);line-height:1;
+  color:var(--brass-l);margin:-10px 0 14px;transition:.4s}
+.fx-item.is-active .fx-title{margin-top:-46px;color:var(--cream)}
+.fx-desc{font-family:var(--serif);font-size:16px;line-height:1.6;color:rgba(245,237,216,.78);margin:0}
+.fx-name{font-family:var(--serif);font-size:19px;color:var(--cream);margin:0 0 10px}
+.fx-name span{display:block;font-family:var(--sans);font-size:13px;color:rgba(245,237,216,.55);margin-top:2px}
+.fx-quote{font-family:var(--serif);font-style:italic;color:rgba(245,237,216,.6);
+  border-left:2px solid rgba(227,192,90,.45);padding-left:14px;margin:12px 0 0}
+
 /* ------------------------------------------------- блоки фабулы ---------- */
 .story-card{background:var(--paper);color:var(--ink);text-shadow:none;border-radius:10px;
             border:1px solid var(--parch-line);border-top:3px solid var(--brass);
@@ -299,6 +330,15 @@ h2{font-size:clamp(23px,3vw,34px)}
   .paper{padding:26px 20px}
   .story-card{padding:22px 20px}
   .party{padding:22px 20px}
+}
+@media (max-width:767px){
+  .fx-timeline::before{left:40px}
+  .fx-item,.fx-item:nth-child(even){align-self:flex-start;width:100%;padding:0 20px 110px 80px;
+    transform:translateY(-30px)}
+  .fx-item:last-child{padding-bottom:40px}
+  .fx-item::before,.fx-item:nth-child(even)::before{display:none} /* подпись сбоку налезает на дату */
+  .fx-item.is-active .fx-title{margin-top:-10px}
+  .fx-title{font-size:40px}
 }
 @media (max-width:700px){
   .timeline::before{left:14px;margin-left:0}
