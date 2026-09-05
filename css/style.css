@@ -169,6 +169,48 @@ h2{font-size:clamp(23px,3vw,34px)}
 .fx-quote{font-family:var(--serif);font-style:italic;color:rgba(245,237,216,.6);
   border-left:2px solid rgba(227,192,90,.45);padding-left:14px;margin:12px 0 0}
 
+/* --------------------------------- фабула: стиль «slides» (пен XmozON) --- */
+.tl-sec_slides{position:relative;padding:0;background:var(--navy)}
+.tl-sec_slides .wrap,.tl-sec_slides #story-blocks{width:100%;height:100%;margin:0} /* sticky-сцене нужен высокий родитель */
+.tl-sec_slides>.wrap>.eyebrow{display:none}
+.sl-stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;perspective:1100px;
+  background:var(--navy)}
+.sl-slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  padding:0 8vw;backface-visibility:hidden;will-change:transform;transform-origin:50% 50%;
+  box-shadow:0 0 80px rgba(0,0,0,.5)}
+.sl-tone-a{background:linear-gradient(160deg,#0d1526,#16213a)}
+.sl-tone-b{background:linear-gradient(160deg,#16213a,#243252)}
+.sl-tone-c{background:linear-gradient(160deg,#1a2440,#2b3a5e)}
+.sl-tone-d{background:linear-gradient(160deg,#241f1a,#3a2f1c)}   /* тёплый — латунь в тени */
+.sl-inner{width:min(760px,90vw);color:var(--cream);text-align:center}
+.sl-label{font-family:var(--sans);font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--brass-l);font-weight:700;margin:0 0 18px}
+.sl-title{font-family:var(--serif);font-weight:400;font-size:clamp(34px,5.2vw,68px);line-height:1.05;
+  color:var(--cream);margin:0 0 22px}
+.sl-slide_title .sl-title{font-size:clamp(26px,3.4vw,44px);line-height:1.2}
+.sl-text{font-family:var(--serif);font-size:clamp(17px,1.7vw,22px);line-height:1.55;
+  color:rgba(245,237,216,.85);margin:0 auto;max-width:640px}
+.sl-amount{font-family:var(--serif);font-size:clamp(19px,2vw,24px);margin:0}
+.sl-amount b{color:var(--brass-l)}
+.sl-role{font-family:var(--sans);font-size:14px;color:rgba(245,237,216,.55);margin:-10px 0 16px}
+.sl-quote{font-family:var(--serif);font-style:italic;color:rgba(245,237,216,.65);margin:18px auto 0;
+  max-width:600px;border-top:1px solid rgba(227,192,90,.35);padding-top:16px}
+.sl-slide_p .sl-inner{border-left:3px solid var(--brass);padding-left:28px;text-align:left}
+.sl-slide_d .sl-inner{border-right:3px solid var(--stone-l);padding-right:28px;text-align:right}
+.sl-slide_p .sl-text,.sl-slide_d .sl-text,.sl-slide_p .sl-quote,.sl-slide_d .sl-quote{margin-left:0;margin-right:0}
+.sl-slide_d .sl-text,.sl-slide_d .sl-quote{margin-left:auto}
+.sl-hint{font-family:var(--sans);font-size:13px;color:rgba(245,237,216,.5);margin:26px 0 0;letter-spacing:.04em}
+.sl-eyebrow{position:absolute;top:22px;left:0;right:0;text-align:center;z-index:5;margin:0;pointer-events:none}
+.sl-arrow{position:absolute;top:50%;z-index:5;width:52px;height:52px;margin-top:-26px;border-radius:50%;
+  border:1px solid rgba(227,192,90,.5);background:rgba(13,21,38,.5);color:var(--brass-l);font-size:30px;
+  line-height:1;cursor:pointer;transition:background .2s}
+.sl-arrow:hover{background:rgba(227,192,90,.18)}
+.sl-prev{left:18px}.sl-next{right:18px}
+.sl-dots{position:absolute;bottom:26px;left:0;right:0;z-index:5;display:flex;justify-content:center;gap:10px}
+.sl-dot{width:10px;height:10px;border-radius:50%;border:2px solid rgba(227,192,90,.6);background:transparent;
+  padding:0;cursor:pointer;transition:background .2s}
+.sl-dot.is-active{background:var(--brass)}
+
 /* ------------------------------------------------- блоки фабулы ---------- */
 .story-card{background:var(--paper);color:var(--ink);text-shadow:none;border-radius:10px;
             border:1px solid var(--parch-line);border-top:3px solid var(--brass);
@@ -332,6 +374,14 @@ h2{font-size:clamp(23px,3vw,34px)}
   .party{padding:22px 20px}
 }
 @media (max-width:767px){
+  .sl-slide{padding:0 6vw}
+  .sl-title{font-size:clamp(30px,9vw,44px)}
+  .sl-text{font-size:16px}
+  .sl-arrow{display:none}
+  .sl-slide_p .sl-inner,.sl-slide_d .sl-inner{text-align:left;border-right:none;padding-right:0;
+    border-left:3px solid var(--brass);padding-left:18px}
+  .sl-slide_d .sl-inner{border-left-color:var(--stone-l)}
+  .sl-slide_d .sl-text,.sl-slide_d .sl-quote{margin-left:0}
   .fx-timeline::before{left:40px}
   .fx-item,.fx-item:nth-child(even){align-self:flex-start;width:100%;padding:0 20px 110px 80px;
     transform:translateY(-30px)}

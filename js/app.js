@@ -241,11 +241,93 @@
   }
 
   function buildStory() {
-    var c = cur();
-    $('#ch-story').classList.toggle('tl-sec_focus', c.story === 'focus');
+    var c = cur(), sec = $('#ch-story');
+    sec.className = c.story === 'slides' ? 'tl-sec tl-sec_slides' : 'flow flow_dark tl-sec' + (c.story === 'focus' ? ' tl-sec_focus' : '');
+    sec.style.height = '';
+    slides = []; focusItems = [];
     if (c.story === 'focus') return buildStoryFocus();
+    if (c.story === 'slides') return buildStorySlides();
     return buildStoryCards();
   }
+
+  /* Стиль «slides» (по пену MAW/XmozON, GSAP-слайдер): полноэкранные слайды,
+     текущий уменьшается и уезжает влево с поворотом, следующий въезжает справа.
+     Без GSAP и без перехвата колеса: секция высотой N экранов + sticky-сцена,
+     кадр — функция позиции скролла (назад отматывается). Точки и стрелки просто
+     прокручивают страницу к нужному слайду. */
+  var slides = [], slideDots = [];
+  function buildStorySlides() {
+    var c = cur(), host = $('#story-blocks'), sec = $('#ch-story'), html = [];
+    var tones = ['sl-tone-a', 'sl-tone-b', 'sl-tone-c', 'sl-tone-d'];
+    function slide(i, label, title, body, cls) {
+      return '<div class="sl-slide ' + tones[i % tones.length] + (cls ? ' ' + cls : '') + '">' +
+        '<div class="sl-inner"><p class="sl-label">' + esc(label) + '</p>' +
+        '<h2 class="sl-title">' + esc(title) + '</h2>' + body + '</div></div>';
+    }
+    html.push(slide(0, esc(c.court) + ' · дело № ' + esc(c.number), c.short,
+      '<p class="sl-amount">Цена иска — <b>' + money(c.amount) + '</b></p>' +
+      '<p class="sl-hint">Листайте — обстоятельства дела откроются по одному</p>', 'sl-slide_title'));
+    c.facts.forEach(function (f, i) {
+      html.push(slide(i + 1, 'Обстоятельства · ' + (i + 1) + ' из ' + c.facts.length,
+        dateLabel(f, i + 1) || 'Этап ' + (i + 1), '<p class="sl-text">' + esc(f) + '</p>'));
+    });
+    ['plaintiff', 'defendant'].forEach(function (k, j) {
+      var p = c.parties[k], isP = k === 'plaintiff';
+      html.push(slide(c.facts.length + 1 + j, isP ? 'Позиция истца' : 'Позиция ответчика', p.name,
+        '<p class="sl-role">' + esc(p.role) + '</p><p class="sl-text">' + esc(p.claim) + '</p>' +
+        '<p class="sl-quote">«' + esc(p.quote) + '»</p>' +
+        (isP ? '' : '<p class="sl-hint">Фабула изучена — листайте дальше к выбору позиции</p>'), isP ? 'sl-slide_p' : 'sl-slide_d'));
+    });
+    var n = html.length;
+    host.innerHTML = '<div class="sl-stage">' + html.join('') +
+      '<p class="sl-eyebrow eyebrow">Шаг 2 · фабула дела</p>' +
+      '<button class="sl-arrow sl-prev js-sl-prev" type="button" aria-label="Назад">‹</button>' +
+      '<button class="sl-arrow sl-next js-sl-next" type="button" aria-label="Дальше">›</button>' +
+      '<div class="sl-dots">' + html.map(function (_, i) { return '<button class="sl-dot" data-i="' + i + '" type="button" aria-label="Слайд ' + (i + 1) + '"></button>'; }).join('') + '</div>' +
+      '</div>';
+    sec.style.height = (n * 100 + 35) + 'vh';
+    slides = Array.prototype.slice.call(host.querySelectorAll('.sl-slide'));
+    slideDots = Array.prototype.slice.call(host.querySelectorAll('.sl-dot'));
+    if (tlObserver) tlObserver.disconnect();
+    updateSlides();
+    Scrolly.refresh();
+  }
+
+  function slideProgress() {
+    var top = $('#ch-story').getBoundingClientRect().top + window.pageYOffset;
+    return Math.max(0, Math.min(slides.length - 1, (window.pageYOffset - top) / window.innerHeight));
+  }
+  function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+  function updateSlides() {
+    if (!slides.length) return;
+    var s = slideProgress(), i = Math.floor(s), t = s - i;
+    if (i >= slides.length - 1) { i = slides.length - 1; t = 0; }
+    var k = clamp01((t - 0.3) / 0.7);                 /* фаза сдвига/поворота */
+    slides.forEach(function (el, j) {
+      var tr, vis = true;
+      if (j === i) {
+        var sc = 1 - 0.2 * clamp01((t - 0.15) / 0.3);   /* первые 15% — слайд стоит во весь экран */
+        tr = 'translateX(' + (-100 * k) + '%) rotateY(' + (80 * k) + 'deg) scale(' + sc + ')';
+      } else if (j === i + 1 && t > 0) {
+        var sc2 = 0.8 + 0.2 * clamp01((t - 0.65) / 0.35);
+        tr = 'translateX(' + (100 * (1 - k)) + '%) rotateY(' + (-80 * (1 - k)) + 'deg) scale(' + sc2 + ')';
+      } else if (j < i) { tr = 'translateX(-100%) rotateY(80deg) scale(.8)'; vis = false; }
+      else { tr = 'translateX(100%) rotateY(-80deg) scale(.8)'; vis = false; }
+      el.style.transform = tr;
+      el.style.visibility = vis ? 'visible' : 'hidden';
+      el.style.zIndex = j === i ? 2 : j === i + 1 ? 3 : 1;
+    });
+    var active = t > 0.5 ? i + 1 : i;
+    slideDots.forEach(function (d, j) { d.classList.toggle('is-active', j === active); });
+  }
+  function gotoSlide(i) {
+    var top = $('#ch-story').getBoundingClientRect().top + window.pageYOffset;
+    i = Math.max(0, Math.min(slides.length - 1, i));
+    window.scrollTo({ top: top + i * window.innerHeight, behavior: 'smooth' });
+  }
+  window.addEventListener('scroll', function () { if (slides.length && !$('#case-flow').hidden) updateSlides(); }, { passive: true });
+  window.addEventListener('resize', function () { if (slides.length) updateSlides(); });
+
 
   /* Стиль «focus» (по пену knyttneve/bgvmma): тонкая линия по центру, блоки
      слева/справа, у каждого крупная дата-заголовок; в фокусе только блок у
@@ -518,6 +600,9 @@
     if (hit('.case')) selectCase(+hit('.case').dataset.i);
     else if (hit('.side')) startGame(hit('.side').dataset.side);
     else if (hit('.js-recap')) scrollToEl($('#ch-story'));
+    else if (hit('.sl-dot')) gotoSlide(+hit('.sl-dot').dataset.i);
+    else if (hit('.js-sl-prev')) gotoSlide(Math.round(slideProgress()) - 1);
+    else if (hit('.js-sl-next')) gotoSlide(Math.round(slideProgress()) + 1);
     else if (hit('.js-prev')) {
       var n = side().args[state.argIdx].options.length;
       renderChooser((+$('#game-choice').dataset.i + n - 1) % n);
