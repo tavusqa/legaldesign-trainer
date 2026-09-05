@@ -98,6 +98,7 @@ h2{font-size:clamp(23px,3vw,34px)}
 .case-t{font-family:var(--serif);font-size:19px;font-weight:700;margin:8px 0 10px}
 .case-d{font-size:14px;color:var(--slate);margin:0 0 16px}
 .case-a{font-size:14px;font-weight:700;color:var(--ink)}
+.cases-note{color:var(--mute);font-size:13px;margin:22px 0 0;text-align:center}
 
 /* ------------------------------------------------- блоки фабулы ---------- */
 .story-card{background:var(--paper);color:var(--ink);text-shadow:none;border-radius:10px;

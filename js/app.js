@@ -173,12 +173,31 @@
                                y: { at: [3.45, 4.0], to: [46, 0] } });
   }
 
-  /* Подсказка «листайте» видна только у самого верха страницы. */
+  /* Подсказка «листайте» видна только у самого верха страницы. Там же —
+     сброс выбранного дела: вернулся к экрану выбора → фабула прежнего дела
+     исчезает, в шаг 2 нельзя уехать, не кликнув карточку. */
+  var lastY = 0, holdReset = 0;
   function watchHint() {
     var hint = $('#hint');
+    lastY = window.pageYOffset;
     window.addEventListener('scroll', function () {
-      hint.classList.toggle('is-hidden', window.pageYOffset > window.innerHeight * 0.6);
+      var y = window.pageYOffset, casesTop = $('#sec-cases').offsetTop;
+      hint.classList.toggle('is-hidden', y > window.innerHeight * 0.6);
+      /* сброс — только при движении ВВЕРХ из фабулы к экрану дел, и не во время
+         нашего же программного скролла после клика по карточке */
+      if (state.caseIdx >= 0 && Date.now() > holdReset && y < lastY &&
+          y <= casesTop + window.innerHeight * 0.35) resetCase();
+      lastY = y;
     }, { passive: true });
+  }
+
+  function resetCase() {
+    state.caseIdx = -1;
+    state.side = null;
+    $('#case-flow').hidden = true;
+    $('#post-side').hidden = true;
+    renderCases();
+    Scrolly.refresh();
   }
 
   /* ===================================================== выбор дела ====== */
@@ -291,6 +310,7 @@
     $('#sec-results').hidden = true;
     buildStory();
     renderSideChoice();
+    holdReset = Date.now() + 2500;
     if (!keepScroll) scrollToEl($('#ch-story'));
   }
 
